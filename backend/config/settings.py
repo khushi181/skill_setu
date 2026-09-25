@@ -2,7 +2,9 @@
 Django settings for config project.
 """
 
+import os
 from pathlib import Path
+import dj_database_url
 
 
 # --------------------------------------------------
@@ -19,15 +21,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Development key only.
 # Before production, move this to an environment variable
 # and generate a new secret key.
-SECRET_KEY = "django-insecure-development-only-change-before-production"
+SECRET_KEY = os.environ.get(
+    "SECRET_KEY",
+    "django-insecure-development-only-change-before-production"
+)
 
-DEBUG = True
+DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
+    ".onrender.com",
 ]
-
 
 # --------------------------------------------------
 # APPLICATIONS
@@ -61,6 +66,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
 
     "django.contrib.sessions.middleware.SessionMiddleware",
 
@@ -74,7 +80,6 @@ MIDDLEWARE = [
 
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
-
 
 # --------------------------------------------------
 # URLS
